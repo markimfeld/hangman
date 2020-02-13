@@ -87,29 +87,14 @@ def showDrawing():
 
 def showBlank(secretWord, letter):
     nLetter = secretWord.__len__()
-    # if letter != '' and letter in secretWord:
-    #     pos = secretWord.find(letter)
-    #     repeatedTimes = secretWord.count(letter)
-    finalWord = ''
+    
+    splittedWord = secretWord.split(letter)
 
-    # if letter != '' and letter in secretWord:
-    #     pos = secretWord.find(letter)
-    #     timesRepeated = secretWord.count(letter)
-    timesRepeated = secretWord.count(letter)
-    for l in timesRepeated:
-        if 
+    for item in range(len(splittedWord)):
+        splittedWord[item] = '_'*len(splittedWord[item])       
 
+    newSplittedWord = letter.join(splittedWord)
 
-        
+    print(newSplittedWord)
 
-    print(finalWord)
-
-
-    #     drawing = "_"*pos
-    #     drawing += letter
-    #     drawing += "_"* (nLetter-pos-1)
-    #     print(repeatedTimes)
-    # else:
-    #     print("_"*nLetter)
-
-showBlank('tictac','t')
+showBlank('tictac','a')
