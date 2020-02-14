@@ -66,45 +66,62 @@ def getSecretWord():
     secretWord = random.choice(WORDS)
     return secretWord
 
-def showDrawing(playerLife):
-    if playerLife == 6:
-        print(HANGMAN_PICS[0])
-    elif playerLife == 5:
-        print(HANGMAN_PICS[1])
-    elif playerLife == 4:
-        print(HANGMAN_PICS[2])
-    elif playerLife == 3:
-        print(HANGMAN_PICS[3])
-    elif playerLife == 2:
-        print(HANGMAN_PICS[4])
-    elif playerLife == 1:
-        print(HANGMAN_PICS[5])
-    else:
-        print(HANGMAN_PICS[6])
+def showBlank(missedLetters, correctLetters, secretWord):
+
+    print(HANGMAN_PICS[len(missedLetters)])
+    print()
+
+    print('Missed letters: ', end='')
+    for letter in missedLetters:
+        print(letter, end='')
+    print()
+
+    blanks = '_'*len(secretWord)
+
+    for i in range(len(secretWord)):
+        if secretWord[i] in correctLetters:
+            blanks = blanks[:i] + secretWord[i] + blanks[i+1:]
+
+    for letter in blanks:
+        print(letter, end=' ')
+
+    print()
 
 
-def showBlank(secretWord, letter):
+
+showBlank('', 'ti', 'tictactoe')
+    # if letter in secretWord and not stateWord.isalpha():
+    #     splittedWord = secretWord.split(letter)
+
+    #     for item in range(len(splittedWord)):
+    #         splittedWord[item] = '_'*len(splittedWord[item])       
+    #     stateWord = letter.join(splittedWord)
+
+    # elif letter in secretWord and stateWord.isalpha():
+    #     splittedWord = secretWord.split(letter)
+
+
+    # return stateWord
     
-    newSplittedWord = '_'*len(secretWord)
 
-    if letter in secretWord:
-        splittedWord = secretWord.split(letter)
 
-        for item in range(len(splittedWord)):
-            splittedWord[item] = '_'*len(splittedWord[item])       
 
-        newSplittedWord = letter.join(splittedWord)
 
-    return newSplittedWord
+# playAgain = 'yes'
+# playerLife = 6
+# letter = ','
+# guessWord = getSecretWord()
+# currentStateWord = '_'*len(guessWord) 
+
+
+# while playAgain == 'yes' or playAgain == 'Yes':
+
+#     showDrawing(playerLife)
+#     print("- Secret Word: " + showBlank(guessWord, letter))
+
+#     print('\n\nGuess a letter: ')
+#     letter = input()
+
+#     if letter not in guessWord:
+#         playerLife -= 1
     
-
-playAgain = 'yes'
-
-while playAgain == 'yes' or playAgain == 'Yes':
-    playerLife = 6
-    guessWord = getSecretWord()
-    showDrawing(playerLife)
-    print("- Secret Word: " + showBlank(guessWord, letter=','))
-
-    print('\n\nGuess a letter: ')
-    letter = input()
