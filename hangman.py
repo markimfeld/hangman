@@ -80,18 +80,20 @@ words = {
     'fruits': 'orange apple bananas kiwi fruit sandia'.split()
 }
 
-def getRandomWord(wordList):
-    category = random.choice(list(wordList.keys()))
-    word = random.choice(wordList[category])
-    return word, category
+def getRandomWord(wordDict):
+    category = random.choice(list(wordDict.keys()))
+    wordIndex = random.randint(0, len(wordDict[category]) - 1)
+    return [wordDict[category][wordIndex], category]
+    # category = random.choice(list(wordList.keys()))
+    # word = random.choice(wordList[category])
+    # return word, category
     # wordIndex = random.randint(0, len(wordList['category']) - 1)
     # return wordList[wordIndex]
 
 
 def displayBoard(missedLetters, correctLetters, secretWord, category):
-
     print(HANGMAN_PICS[len(missedLetters)])
-    print()
+    print()  
 
     print('Category: {0}'.format(category.upper()), end='')
     print('\n')
@@ -134,8 +136,26 @@ def playAgain():
     print('Do you want to play again? (yes or no)')
     return input().lower().startswith('y')
 
+def getDifficulty():
+    while True:
+        print('Enter difficulty: E - Easy, M - Medium, H - Hard')
+        difficulty = input().upper()
+        if difficulty in 'EMH':
+            break
+
+    if difficulty == 'M':
+        del HANGMAN_PICS[8]
+        del HANGMAN_PICS[7]
+    if difficulty == 'H':
+        del HANGMAN_PICS[8]
+        del HANGMAN_PICS[7]
+        del HANGMAN_PICS[6]
+        del HANGMAN_PICS[5]
+
+    return difficulty
 
 print('H A N G M A N')
+difficulty = getDifficulty()
 missedLetters = ''
 correctLetters = ''
 secretWord, category = getRandomWord(words)
@@ -164,7 +184,7 @@ while True:
 
         # Check if the player has guessed too many times and lost.
         if len(missedLetters) == len(HANGMAN_PICS) - 1:
-            displayBoard(missedLetters, correctLetters, secretWord)
+            displayBoard(missedLetters, correctLetters, secretWord, category)
             print('You have run out of guesses!\n After ' + str(len(missedLetters)) + ' missed guesses and ' + str(len(correctLetters)) + ' correct guess, the word was "' + secretWord + '" ')
             gameIsDone = True
     # Ask the player if they want to play again (but only if the game is done).
@@ -173,7 +193,7 @@ while True:
             missedLetters = ''
             correctLetters = ''
             gameIsDone = False
-            secretWord = getRandomWord(words)
+            secretWord, category = getRandomWord(words)
         else:
             break
 
