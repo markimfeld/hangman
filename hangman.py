@@ -67,21 +67,34 @@ HANGMAN_PICS = [
     ''',
 ]
 
-words = '''ant baboon badger bat bear beaver camel cat clam cobra cougar
-coyote crow deer dog donkey duck eagle ferret fox frog goat goose hawk
-lion lizard llama mole monkey moose mouse mule newt otter owl panda
-parrot pigeon python rabbit ram rat raven rhino salmon seal shark sheep
-skunk sloth snake spider stork swan tiger toad trout turkey turtle
-weasel whale wolf wombat zebra'''.split()
+# words = '''ant baboon badger bat bear beaver camel cat clam cobra cougar
+# coyote crow deer dog donkey duck eagle ferret fox frog goat goose hawk
+# lion lizard llama mole monkey moose mouse mule newt otter owl panda
+# parrot pigeon python rabbit ram rat raven rhino salmon seal shark sheep
+# skunk sloth snake spider stork swan tiger toad trout turkey turtle
+# weasel whale wolf wombat zebra'''.split()
+
+words = {
+    'colors': 'orange red yellow brown blue white black'.split(),
+    'animals': 'ant baboon badger bat bear beaver camel cat clam cobra cougar'.split(),
+    'fruits': 'orange apple bananas kiwi fruit sandia'.split()
+}
 
 def getRandomWord(wordList):
-    wordIndex = random.randint(0, len(wordList) - 1)
-    return wordList[wordIndex]
+    category = random.choice(list(wordList.keys()))
+    word = random.choice(wordList[category])
+    return word, category
+    # wordIndex = random.randint(0, len(wordList['category']) - 1)
+    # return wordList[wordIndex]
 
-def displayBoard(missedLetters, correctLetters, secretWord):
+
+def displayBoard(missedLetters, correctLetters, secretWord, category):
 
     print(HANGMAN_PICS[len(missedLetters)])
     print()
+
+    print('Category: {0}'.format(category.upper()), end='')
+    print('\n')
 
     print('Missed letters: ', end='')
     for letter in missedLetters:
@@ -121,14 +134,15 @@ def playAgain():
     print('Do you want to play again? (yes or no)')
     return input().lower().startswith('y')
 
+
 print('H A N G M A N')
 missedLetters = ''
 correctLetters = ''
-secretWord = getRandomWord(words)
+secretWord, category = getRandomWord(words)
 gameIsDone = False
 
 while True:
-    displayBoard(missedLetters, correctLetters, secretWord)
+    displayBoard(missedLetters, correctLetters, secretWord, category)
 
     # Let the player enter a letter
     guess = getGuess(missedLetters + correctLetters)
