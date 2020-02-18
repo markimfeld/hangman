@@ -51,23 +51,52 @@ HANGMAN_PICS = [
    / \  |
        ===
     ''',
+    '''
+    +---+
+   [O   |
+   /|\  |
+   / \  |
+       ===
+    ''',
+    '''
+    +---+
+   [O]  |
+   /|\  |
+   / \  |
+       ===
+    ''',
 ]
 
-words = '''ant baboon badger bat bear beaver camel cat clam cobra cougar
-coyote crow deer dog donkey duck eagle ferret fox frog goat goose hawk
-lion lizard llama mole monkey moose mouse mule newt otter owl panda
-parrot pigeon python rabbit ram rat raven rhino salmon seal shark sheep
-skunk sloth snake spider stork swan tiger toad trout turkey turtle
-weasel whale wolf wombat zebra'''.split()
+# words = '''ant baboon badger bat bear beaver camel cat clam cobra cougar
+# coyote crow deer dog donkey duck eagle ferret fox frog goat goose hawk
+# lion lizard llama mole monkey moose mouse mule newt otter owl panda
+# parrot pigeon python rabbit ram rat raven rhino salmon seal shark sheep
+# skunk sloth snake spider stork swan tiger toad trout turkey turtle
+# weasel whale wolf wombat zebra'''.split()
 
-def getRandomWord(wordList):
-    wordIndex = random.randint(0, len(wordList) - 1)
-    return wordList[wordIndex]
+words = {
+    'colors': 'orange red yellow brown blue white black'.split(),
+    'animals': 'ant baboon badger bat bear beaver camel cat clam cobra cougar'.split(),
+    'fruits': 'orange apple bananas kiwi fruit sandia'.split()
+}
 
-def displayBoard(missedLetters, correctLetters, secretWord):
+def getRandomWord(wordDict):
+    category = random.choice(list(wordDict.keys()))
+    wordIndex = random.randint(0, len(wordDict[category]) - 1)
+    return [wordDict[category][wordIndex], category]
+    # category = random.choice(list(wordList.keys()))
+    # word = random.choice(wordList[category])
+    # return word, category
+    # wordIndex = random.randint(0, len(wordList['category']) - 1)
+    # return wordList[wordIndex]
 
+
+def displayBoard(missedLetters, correctLetters, secretWord, category):
     print(HANGMAN_PICS[len(missedLetters)])
-    print()
+    print()  
+
+    print('Category: {0}'.format(category.upper()), end='')
+    print('\n')
 
     print('Missed letters: ', end='')
     for letter in missedLetters:
@@ -107,14 +136,33 @@ def playAgain():
     print('Do you want to play again? (yes or no)')
     return input().lower().startswith('y')
 
+def getDifficulty():
+    while True:
+        print('Enter difficulty: E - Easy, M - Medium, H - Hard')
+        difficulty = input().upper()
+        if difficulty in 'EMH':
+            break
+
+    if difficulty == 'M':
+        del HANGMAN_PICS[8]
+        del HANGMAN_PICS[7]
+    if difficulty == 'H':
+        del HANGMAN_PICS[8]
+        del HANGMAN_PICS[7]
+        del HANGMAN_PICS[6]
+        del HANGMAN_PICS[5]
+
+    return difficulty
+
 print('H A N G M A N')
+difficulty = getDifficulty()
 missedLetters = ''
 correctLetters = ''
-secretWord = getRandomWord(words)
+secretWord, category = getRandomWord(words)
 gameIsDone = False
 
 while True:
-    displayBoard(missedLetters, correctLetters, secretWord)
+    displayBoard(missedLetters, correctLetters, secretWord, category)
 
     # Let the player enter a letter
     guess = getGuess(missedLetters + correctLetters)
@@ -136,7 +184,7 @@ while True:
 
         # Check if the player has guessed too many times and lost.
         if len(missedLetters) == len(HANGMAN_PICS) - 1:
-            displayBoard(missedLetters, correctLetters, secretWord)
+            displayBoard(missedLetters, correctLetters, secretWord, category)
             print('You have run out of guesses!\n After ' + str(len(missedLetters)) + ' missed guesses and ' + str(len(correctLetters)) + ' correct guess, the word was "' + secretWord + '" ')
             gameIsDone = True
     # Ask the player if they want to play again (but only if the game is done).
@@ -145,52 +193,7 @@ while True:
             missedLetters = ''
             correctLetters = ''
             gameIsDone = False
-            secretWord = getRandomWord(words)
+            secretWord, category = getRandomWord(words)
         else:
             break
 
-
-# def checkLetters(missedLetters, correctLetters, letters, secretWord):
-#     if letters in secretWord and letters not in correctLetters:
-#         correctLetters += letters
-#     elif letters not in secretWord and letters not in missedLetters:
-#         missedLetters += letters
-#     else:
-#         print("Ya ingresaste esa letra guanaco! Probá otra...")
-
-#     return missedLetters, correctLetters
-
-# def resetValues(missedLetters, correctLetters, secretWord):
-#     missedLetters = ''
-#     correctLetters = ''
-#     secretWord = getRandomWord(WORDS)
-#    return missedLetters, correctLetters, secretWord
-
-# print('H A N G M A N')
-# playAgain = 'yes'
-# missedLetters = ''
-# correctLetters = ''
-# secretWord = getRandomWord(WORDS)
-
-# while playAgain == 'yes' or playAgain == 'Yes':
-#     displayBoard(missedLetters, correctLetters, secretWord)
-#     print()
-#     letters = input('Guess a letter: ')
-#     missedLetters, correctLetters = checkLetters(missedLetters, correctLetters, letters, secretWord)
-#     os.system('clear')
-#     if missedLetters.__len__() > 6:
-#         missedLetters, correctLetters, secretWord = resetValues(missedLetters, correctLetters, secretWord)
-#         print("Perdiste!")
-#         print("Play Again? yes or no", end=" ")
-#         playAgain = input()
-#         os.system('clear')
-#     elif correctLetters.__len__() == secretWord.__len__():
-#         missedLetters, correctLetters, secretWord = resetValues(missedLetters, correctLetters, secretWord)
-#         print("Ganaste guanaco!")
-#         print("Play Again? yes or no", end=" ")
-#         playAgain = input() 
-#         os.system('clear')
-    
-
-
-        
